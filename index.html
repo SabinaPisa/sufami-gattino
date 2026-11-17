@@ -49,15 +49,21 @@ button{background:#a3ff12;color:#000;border:none;padding:15px 25px;border-radius
 <script>
 let s=0;
 function meow(){
-  let a=new Audio('https://www.soundjay.com/meow/meow-1.mp3');
-  a.volume=0.9;
-  a.play().catch(()=>{
-    let s=window.speechSynthesis;
-    let u=new SpeechSynthesisUtterance('Miyow!');
-    u.pitch=2; u.rate=1.5; s.speak(u);
-  });
-  let cat=document.getElementById('mainCat');
-  if(cat){cat.animate([{transform:'scale(1)'},{transform:'scale(1.1)'},{transform:'scale(1)'}],{duration:300});}
+  try{
+    let ctx=new(window.AudioContext||window.webkitAudioContext)();
+    if(ctx.state==='suspended') ctx.resume();
+    let o=ctx.createOscillator();
+    let g=ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type='sawtooth';
+    o.frequency.setValueAtTime(400,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(900,ctx.currentTime+0.12);
+    o.frequency.exponentialRampToValueAtTime(350,ctx.currentTime+0.45);
+    g.gain.setValueAtTime(0.8,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.01,ctx.currentTime+0.5);
+    o.start(); o.stop(ctx.currentTime+0.5);
+  }catch(e){}
+  document.body.animate([{transform:'scale(1)'},{transform:'scale(1.03)'},{transform:'scale(1)'}],{duration:200});
 	}
 function glow(){
 let c=document.getElementById('mainCat');

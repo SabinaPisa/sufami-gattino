@@ -49,10 +49,16 @@ button{background:#a3ff12;color:#000;border:none;padding:15px 25px;border-radius
 <script>
 let s=0;
 function meow(){
-let a=new Audio('https://cdn.pixabay.com/audio/2022/03/10/audio_c3a1a094a8.mp3');
-a.play();
-document.getElementById('mainCat').animate([{transform:'scale(1)'},{transform:'scale(1.2)'},{transform:'scale(1)'}],{duration:300});
-}
+  let a=new Audio('https://www.soundjay.com/meow/meow-1.mp3');
+  a.volume=0.9;
+  a.play().catch(()=>{
+    let s=window.speechSynthesis;
+    let u=new SpeechSynthesisUtterance('Miyow!');
+    u.pitch=2; u.rate=1.5; s.speak(u);
+  });
+  let cat=document.getElementById('mainCat');
+  if(cat){cat.animate([{transform:'scale(1)'},{transform:'scale(1.1)'},{transform:'scale(1)'}],{duration:300});}
+	}
 function glow(){
 let c=document.getElementById('mainCat');
 c.classList.toggle('eyes-glow');
